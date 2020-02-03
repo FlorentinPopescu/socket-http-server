@@ -1,9 +1,11 @@
+# imports
 import unittest
 import subprocess
 import http.client
 import os
 
 
+# ==============================================
 class WebTestCase(unittest.TestCase):
     """tests for the echo server and client"""
 
@@ -190,7 +192,7 @@ class WebTestCase(unittest.TestCase):
 
     def test_ok_response_at_root_index(self):
         """
-        A call to / at least yields a 200 OK response 
+        A call to / at least yields a 200 OK response
         """
 
         directory = ''
@@ -201,5 +203,27 @@ class WebTestCase(unittest.TestCase):
         self.assertEqual(response.getcode(), 200)
 
 
+# ==============================================
 if __name__ == '__main__':
     unittest.main()
+
+
+# ==============================================
+# ---------------SAMPLE RUN---------------------
+# (base) C:\Users\Florentin\Desktop\UW3\L3\socket-http-server>python -m unittest -vv tests.py
+# test_get_404 (tests.WebTestCase) ... ok
+# test_get_sample_1_png (tests.WebTestCase) ... ok
+# test_get_sample_1_png_mime_type (tests.WebTestCase) ... ok
+# test_get_sample_scene_balls_jpeg (tests.WebTestCase) ... ok
+# test_get_sample_scene_balls_jpeg_mime_type (tests.WebTestCase) ... ok
+# test_get_sample_text_content (tests.WebTestCase) ... ok
+# test_get_sample_text_mime_type (tests.WebTestCase) ... ok
+# test_images_index (tests.WebTestCase) ... ok
+# test_ok_response_at_root_index (tests.WebTestCase) ... ok
+# test_post_yields_method_not_allowed (tests.WebTestCase) ... ok
+# test_root_index (tests.WebTestCase) ... ok
+
+# ----------------------------------------------------------------------
+# Ran 11 tests in 0.707s
+
+# OK

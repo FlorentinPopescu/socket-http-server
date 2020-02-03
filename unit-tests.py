@@ -1,10 +1,12 @@
+# imports
 import unittest
 import os
 import http_server
 
 
+# ==============================================
 class TestCase(unittest.TestCase):
-
+    # ------------------------------------------
     def test_response_ok(self):
         mimetype = b"image/bmp"
         body = b"foo"
@@ -21,6 +23,7 @@ class TestCase(unittest.TestCase):
                          str_header.splitlines()[0])
         self.assertIn("Content-Type: " + mimetype.decode(), str_header)
 
+    # ------------------------------------------
     def test_response_method_not_allowed(self):
         response = http_server.response_method_not_allowed()
         str_response = response.decode()
@@ -28,6 +31,7 @@ class TestCase(unittest.TestCase):
         self.assertEqual("HTTP/1.1 405 Method Not Allowed",
                          str_response.splitlines()[0])
 
+    # ------------------------------------------
     def test_response_not_found(self):
         response = http_server.response_not_found()
         str_response = response.decode()
@@ -35,38 +39,42 @@ class TestCase(unittest.TestCase):
         self.assertEqual("HTTP/1.1 404 Not Found",
                          str_response.splitlines()[0])
 
+    # ------------------------------------------
     def test_parse_request_bad_method(self):
         request_head = "POST /foo HTTP/1.1"
 
         with self.assertRaises(NotImplementedError):
             http_server.parse_request(request_head)
 
+    # ------------------------------------------
     def test_parse_request(self):
         path = "/foo"
         request_head = "GET {} HTTP/1.1".format(path)
 
         self.assertEqual(path, http_server.parse_request(request_head))
 
+    # ------------------------------------------
     def test_response_path_file(self):
         path = "/a_web_page.html"
-
         content, mime_type = http_server.response_path(path)
 
         self.assertEqual(b"text/html", mime_type)
-        
+
         with open(os.path.join("webroot", "a_web_page.html"), "rb") as f:
             self.assertEqual(f.read(), content)
 
+    # ------------------------------------------
     def test_response_path_dir(self):
         path = "/"
 
-        content, mime_type = http_server.response_path(path)
+        content, _ = http_server.response_path(path)
 
         self.assertIn(b"favicon.ico", content)
         self.assertIn(b"make_time.py", content)
         self.assertIn(b"sample.txt", content)
         self.assertIn(b"a_web_page.html", content)
 
+    # ------------------------------------------
     def test_response_path_not_found(self):
         path = "/foo/bar/baz/doesnt/exist"
 
@@ -74,5 +82,25 @@ class TestCase(unittest.TestCase):
             http_server.response_path(path)
 
 
+# ==============================================
 if __name__ == '__main__':
     unittest.main()
+
+
+# ==============================================
+# ---------------SAMPLE RUN---------------------
+
+# (base) C:\Users\Florentin\Desktop\UW3\L3\socket-http-server>python -m unittest -vv unit-tests.py
+# test_parse_request (unit-tests.TestCase) ... ok
+# test_parse_request_bad_method (unit-tests.TestCase) ... ok
+# test_response_method_not_allowed (unit-tests.TestCase) ... ok
+# test_response_not_found (unit-tests.TestCase) ... ok
+# test_response_ok (unit-tests.TestCase) ... ok
+# test_response_path_dir (unit-tests.TestCase) ... ok
+# test_response_path_file (unit-tests.TestCase) ... ok
+# test_response_path_not_found (unit-tests.TestCase) ... ok
+
+# ----------------------------------------------
+# Ran 8 tests in 0.360s
+
+# OK
